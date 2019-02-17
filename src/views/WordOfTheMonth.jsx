@@ -93,7 +93,15 @@ class Dashboard extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <div className="table-full-width table-responsive">
-                    <Table>
+                    <Table className="tablesorter" responsive>
+                      <thead className="text-primary">
+                        <tr>
+                          <th></th>
+                          <th>Titile</th>
+                          <th className="text-right">Edit</th>
+                          <th className="text-right">Remove</th>                        
+                        </tr>
+                      </thead>
                       <tbody>
                         {
                           this.state.sampleData.map( data => {
@@ -109,7 +117,7 @@ class Dashboard extends React.Component {
                                   </FormGroup>
                                 </td>
                                 <td>
-                                  <p className="title">{data.title}</p>
+                                 <p className={"title" + (data.isfeatured ? ' featured':'')}>{data.title}</p>
                                   <p className="text-muted">
                                     {data.summary}
                                   </p>
@@ -122,6 +130,7 @@ class Dashboard extends React.Component {
                                                 formTitle: data.title,
                                                 formSummary: data.summary,
                                                 formDescription: data.description,
+                                                formfeatured: data.isfeatured,
                                                 actionType: 'EDIT' 
                                               }
                                             }} 
@@ -147,6 +156,7 @@ class Dashboard extends React.Component {
                       </tbody>
                     </Table>
                   </div>
+                  <div><p className='featuredNote'> Featured articles for User pages</p></div>
                 </CardBody>
               </Card>
             </Col>

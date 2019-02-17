@@ -1,151 +1,160 @@
 import React from "react";
+import { Link  } from 'react-router-dom';
+import NewsData from "Data/NewsData.js";
 
 // reactstrap components
 import {
   Button,
+  ButtonGroup,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
-  CardText,
+  CardTitle,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  Label,
   FormGroup,
-  Form,
   Input,
+  Table,
   Row,
-  Col
+  Col,
+  UncontrolledTooltip,
+  NavLink
 } from "reactstrap";
 
-class UserProfile extends React.Component {
+class News extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sampleData : NewsData
+    };
+    this.handleSingleCheck = this.handleSingleCheck.bind(this);
+  }
+  
+
+  handleSingleCheck = e => {
+    //e.preventDefault()   
+    const item = e.target.name;
+    const isChecked = e.target.checked;
+    if(!isChecked && this.state.allChecked)
+    {
+      this.setState({allChecked : false});
+    }
+    this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
+    console.log(this.state.checkedItems);
+  }
+
+
   render() {
     return (
       <>
         <div className="content">
           <Row>
-            <Col md="12">
-              <Card>
+            <Col lg="12" md="12">
+              <Card className="card-tasks">
                 <CardHeader>
-                  <h5 className="title">Edit Profile</h5>
+                 <FormGroup check>
+                    <Label check>
+                      {/*<Input type="checkbox" onClick={this.handleAllChecked}  value="checkAll" checked={this.state.allChecked}/>
+                      <span className="form-check-sign">                     
+                        <span className="check" />
+                        Select All / UnSelect All
+                      </span>
+                    </Label> */}
+                    <Link to={{ pathname:'/admin/edit-form',
+                                state: {
+                                  formName: 'Add new : Word Of The Month',
+                                  actionType: 'ADD'                          
+                                }
+                              }} 
+                                className="nav-link" id="" onClick={this.props.toggleSidebar}
+                      >
+                        <i className="tim-icons icon-simple-add" /> Add New
+                    </Link>   
+                    </Label>                   
+                    <UncontrolledDropdown>
+                      <DropdownToggle caret className="btn-icon"  color="link" data-toggle="dropdown"  type="button">
+                        <i className="tim-icons icon-settings-gear-63" />
+                      </DropdownToggle>
+                      <DropdownMenu aria-labelledby="dropdownMenuLink" right>
+                        <DropdownItem href="#" onClick={e => e.preventDefault()} >
+                          Remove Selected
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>
+                  </FormGroup> 
                 </CardHeader>
                 <CardBody>
-                  <Form>
-                    <Row>
-                      <Col className="pr-md-1" md="5">
-                        <FormGroup>
-                          <label>Company (disabled)</label>
-                          <Input
-                            defaultValue="Creative Code Inc."
-                            disabled
-                            placeholder="Company"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col className="px-md-1" md="3">
-                        <FormGroup>
-                          <label>Username</label>
-                          <Input
-                            defaultValue="michael23"
-                            placeholder="Username"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col className="pl-md-1" md="4">
-                        <FormGroup>
-                          <label htmlFor="exampleInputEmail1">
-                            Email address
-                          </label>
-                          <Input placeholder="mike@email.com" type="email" />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className="pr-md-1" md="6">
-                        <FormGroup>
-                          <label>First Name</label>
-                          <Input
-                            defaultValue="Mike"
-                            placeholder="Company"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col className="pl-md-1" md="6">
-                        <FormGroup>
-                          <label>Last Name</label>
-                          <Input
-                            defaultValue="Andrew"
-                            placeholder="Last Name"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label>Address</label>
-                          <Input
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                            placeholder="Home Address"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className="pr-md-1" md="4">
-                        <FormGroup>
-                          <label>City</label>
-                          <Input
-                            defaultValue="Mike"
-                            placeholder="City"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col className="px-md-1" md="4">
-                        <FormGroup>
-                          <label>Country</label>
-                          <Input
-                            defaultValue="Andrew"
-                            placeholder="Country"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col className="pl-md-1" md="4">
-                        <FormGroup>
-                          <label>Postal Code</label>
-                          <Input placeholder="ZIP Code" type="number" />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col md="8">
-                        <FormGroup>
-                          <label>About Me</label>
-                          <Input
-                            cols="80"
-                            defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                            that two seat Lambo."
-                            placeholder="Here can be your description"
-                            rows="4"
-                            type="textarea"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </Form>
+                  <div className="table-full-width table-responsive">
+                  <Table className="tablesorter" responsive>
+                      <thead className="text-primary">
+                        <tr>
+                          <th></th>
+                          <th>Titile</th>
+                          <th className="text-right">Edit</th>
+                          <th className="text-right">Remove</th>                        
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          this.state.sampleData.map( data => {
+                            return <tr>
+                                <td>
+                                  <FormGroup check>
+                                    <Label check>
+                                      <Input type="checkbox" />
+                                      <span className="form-check-sign">
+                                        <span className="check" />
+                                      </span>
+                                    </Label>
+                                  </FormGroup>
+                                </td>
+                                <td>
+                                <p className={"title" + (data.isfeatured ? ' featured':'')}>{data.title}</p>
+                                  <p className="text-muted">
+                                    {data.summary}
+                                  </p>
+                                </td>
+                                <td className="td-actions text-right">
+                                 
+                                  <Link to={{ pathname:'/admin/edit-form',
+                                              state: {
+                                                formName:'Edit form : Word Of The Month',
+                                                formTitle: data.title,
+                                                formSummary: data.summary,
+                                                formDescription: data.description,
+                                                formfeatured: data.isfeatured,
+                                                actionType: 'EDIT' 
+                                              }
+                                            }} 
+                                              className="nav-link" id="tooltip636901683" onClick={this.props.toggleSidebar}
+                                    >
+                                      <i className="tim-icons icon-pencil" />
+                                  </Link>                                                                    
+                                  <UncontrolledTooltip delay={0} target="tooltip636901683" placement="right">
+                                    Edit Task
+                                  </UncontrolledTooltip>
+                                  </td>
+                                  <td className="td-actions text-right">
+                                  <Button color="link"id="tooltip636901684" title="" type="button" onClick={this.deleteTask}>
+                                  <i className="tim-icons icon-simple-remove" />
+                                  </Button>
+                                  <UncontrolledTooltip delay={0} target="tooltip636901684" placement="right">
+                                    Remove Task
+                                  </UncontrolledTooltip>
+                                </td>
+                              </tr>
+                            })
+                        }
+                      </tbody>
+                    </Table>
+                  </div>
+                  <div><p className='featuredNote'> Featured articles for User pages</p></div>
                 </CardBody>
-                <CardFooter>
-                  <Button className="btn-fill" color="primary" type="submit">
-                    Save
-                  </Button>
-                </CardFooter>
               </Card>
-            </Col>
-            
+            </Col>          
           </Row>
         </div>
       </>
@@ -153,4 +162,4 @@ class UserProfile extends React.Component {
   }
 }
 
-export default UserProfile;
+export default News;

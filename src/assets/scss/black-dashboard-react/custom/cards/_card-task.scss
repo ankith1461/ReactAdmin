@@ -26,5 +26,17 @@
         color: $white;
       }
     }
+    .featured{
+      &::after{
+      content:"*" ;
+      color:red;
+      }  
+    }
+    .featuredNote{
+      &::before{
+      content:"*" ;
+      color:red;
+      }  
+    }
   }
 }

@@ -19,7 +19,7 @@ ReactDOM.render(
       <Route path="/admin" render={props => <AdminLayout {...props} />} />
       <Route path="/rtl" render={props => <RTLLayout {...props} />} />
       <Route path="/editform" component={EditForm} />
-      <Redirect from="/" to="/admin/dashboard" />
+      <Redirect from="/" to="/admin/word-of-the-month" />
     </Switch>
   </Router>,
   document.getElementById("root")

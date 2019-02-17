@@ -12,6 +12,7 @@ import {
   FormGroup,
   Form,
   Input,
+  Label,
   Row,
   Col
 } from "reactstrap";
@@ -25,16 +26,44 @@ class UserProfile extends React.Component {
        title: this.props.location.state.formTitle,
        summary: this.props.location.state.formSummary,
        description: this.props.location.state.formDescription,
+       featured: this.props.location.state.formfeatured ? this.props.location.state.formfeatured : false,
        actionType: this.props.location.state.actionType
     }
+
     this.handleChange = this.handleChange.bind(this);
+    this.handleEditorChange = this.handleEditorChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
   };
+
+  handleCheckBoxChange = e => {
+    if (e.target.checked){
+      e.target.removeAttribute('checked');
+      this.setState({featured: true});
+   } else {
+      e.target.setAttribute('checked', true);
+      this.setState({featured: false});
+   }
+  }
 
   handleChange = e => {
     e.preventDefault()
     this.setState({ [e.target.name]: e.target.value});
   }
 
+  handleFormSubmit = e => {
+    e.preventDefault()
+    console.log("Type: " + this.state.formType);
+    console.log("Title: " + this.state.title);
+    console.log("Summary: " + this.state.summary);
+    console.log("Featured: " + this.state.featured);
+    console.log("Description: " + this.state.description);
+    console.log("Action: " + this.state.actionType);
+  }
+
+  handleEditorChange = (content) => {
+    this.setState({ description: content });;
+  }
 
   render() {
     // const { ...data } = this.props.location.state;
@@ -66,19 +95,15 @@ class UserProfile extends React.Component {
                         </FormGroup>
                       </Col>
                       <Col className="pr-md-1" md="4">
-                        <FormGroup>
-                        <Input
-                            // defaultValue="Enter Title"
-                            // disabled
-                            //placeholder="title"
-                            type="checkbox"
-                            name="title"
-                            value= {this.state.title}
-                            onChange={this.handleChange}
-                          />
-                          <label>Title</label>
-                          
-                        </FormGroup>
+                      <FormGroup check>
+                        <Label check>
+                        <Input type="checkbox" name="featured" onClick={this.handleCheckBoxChange} checked={this.state.featured}/>
+                           <span className="form-check-sign"> 
+                             Feature
+                          <span className="check" />
+                          </span>
+                        </Label>
+                      </FormGroup>
                       </Col>
                     </Row>
                     <Row>
@@ -101,16 +126,17 @@ class UserProfile extends React.Component {
                       <Col md="10">
                         <FormGroup>
                           <label>Description</label>
+                          
                           <Editor
                             initialValue="<p>This is the placeholder content of the editor</p>"
                             init={{
-                              plugins: 'link image code media',
-                              toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code | media',
+                              plugins: 'link image code media table paste',
+                              toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code | media | paste',
                               height: "480px"
                             }}
                             name="description"
-                            onChange={this.handleChange}
-                            value ={this.state.description}
+                            onEditorChange={this.handleEditorChange}
+                            value ={this.state.description}                            
                           />
                         </FormGroup>
                       </Col>
@@ -118,7 +144,7 @@ class UserProfile extends React.Component {
                   </Form>
                 </CardBody>
                 <CardFooter>
-                  <Button className="btn-fill" color="primary" type="submit">
+                  <Button className="btn-fill" color="primary" onClick={this.handleFormSubmit}>
                       {this.state.actionType === 'ADD' ? "Add" : "Update" }
                   </Button>
                 </CardFooter>
